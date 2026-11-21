@@ -3,101 +3,196 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
   <title>Path-tracking experiments</title>
   <style>
-    :root { color-scheme: light; font-family: "Source Sans 3", "Segoe UI", system-ui, sans-serif; }
-    * { box-sizing: border-box; }
-    body { margin: 0; color: #1d3028; background: #fafbf9; }
-    main { max-width: 68rem; margin: 0 auto; padding: clamp(1.2rem, 5vw, 3rem) 1.25rem 3rem; }
-    h1, h2, h3 { margin: 0; }
-    h1 { font-size: clamp(2rem, 5vw, 3.15rem); line-height: 1.12; letter-spacing: -.025em; }
-    section { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid #aebdb5; }
-    h2 { font-size: clamp(1.2rem, 3vw, 1.6rem); line-height: 1.3; }
-    h3 { margin-bottom: .5rem; font-size: 1rem; line-height: 1.4; }
-    .figures { display: flex; flex-wrap: wrap; gap: .25rem 1.3rem; margin: .5rem 0 1.2rem; color: #425c4f; line-height: 1.5; }
-    .videos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.1rem; }
-    video { display: block; width: 100%; object-fit: contain; background: #19231f; border-radius: .3rem; }
-    .road video { aspect-ratio: 540 / 716; }
-    .soil video { aspect-ratio: 1280 / 576; }
-    a { display: inline-block; margin-top: .45rem; color: #165040; font-size: .9rem; text-underline-offset: .17em; }
-    :focus-visible { outline: 2px solid #165040; outline-offset: 3px; }
-    @media (max-width: 45rem) {
-      .videos { grid-template-columns: 1fr; gap: 1.6rem; }
-      .road video { width: min(100%, 25rem); }
-    }
+    :root { font-family: "Source Sans 3","Segoe UI",system-ui,sans-serif; color:#1b302a; background:#f8faf7; --green:#14503d; --muted:#42594f; --line:#d8e2d9; }
+    * { box-sizing:border-box; }
+    body { margin:0; }
+    main { width:min(100% - 2.4rem,74rem); margin:auto; padding:clamp(1.6rem,5vw,3.8rem) 0 3rem; }
+    h1,h2,h3,p { margin:0; }
+    h1 { font-size:clamp(2.05rem,5vw,3.65rem); letter-spacing:-.045em; line-height:1.08; font-weight:660; }
+    .setup { margin:.8rem 0 0; color:var(--muted); font-size:1.02rem; line-height:1.5; }
+    nav { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1.15rem; }
+    a { color:var(--green); text-underline-offset:.18em; }
+    nav a { display:inline-flex; align-items:center; padding:.5rem .95rem; min-height:44px; border:1px solid #afbfb2; border-radius:1.6rem; text-decoration:none; font-weight:600; }
+    nav a:hover,.fig-links a:hover { background:#e7eee6; }
+    :focus-visible { outline:3px solid #27734e; outline-offset:3px; }
+    section { margin-top:clamp(1.8rem,4vw,3rem); border-top:1px solid #9eafa2; padding-top:1.1rem; scroll-margin-top:1rem; }
+    .scenario { display:block; color:var(--green); font-size:.86rem; font-weight:700; margin-bottom:.2rem; }
+    h2 { font-size:clamp(1.38rem,2.8vw,2rem); line-height:1.22; letter-spacing:-.027em; font-weight:640; }
+    .videos { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; margin-top:1.15rem; align-items:start; }
+    article { min-width:0; background:#fff; border:1px solid var(--line); border-radius:.75rem; overflow:hidden; }
+    h3 { font-size:1.16rem; font-weight:650; padding:.8rem 1rem; line-height:1.3; }
+    h3 small { font-size:.86rem; font-weight:450; color:var(--muted); margin-left:.35rem; }
+    video { display:block; width:100%; aspect-ratio:8 / 5; background:#14201b; object-fit:contain; }
+    .player { position:relative; }
+    .play-cover { position:absolute; inset:0; width:100%; border:0; padding:0; cursor:pointer; background-size:cover; background-position:center; font:inherit; }
+    .play-cover span { position:absolute; bottom:.55rem; left:.65rem; padding:.42rem .7rem; border-radius:1.1rem; color:#fff; background:#12241eee; font-size:.88rem; font-weight:600; }
+    .play-cover:hover span { background:#24533f; }
+    .play-cover:focus-visible { outline-offset:-4px; }
+    .road video.started { aspect-ratio:540 / 716; }
+    .soil video.started { aspect-ratio:1280 / 576; }
+    video:fullscreen { width:100%; height:100%; object-fit:contain; }
+    .body { padding:.85rem 1rem .35rem; }
+    .caption { font-size:1rem; line-height:1.48; }
+    .fig-links { display:grid; grid-template-columns:repeat(3,1fr); gap:.26rem; margin-top:.8rem; }
+    .fig-links a { display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:.12rem; border:1px solid var(--line); border-radius:.34rem; padding:.34rem .36rem; min-height:48px; text-decoration:none; line-height:1.22; }
+    .fig-links span { font-size:.76rem; color:var(--muted); }
+    .fig-links strong { color:var(--green); font-size:.88rem; font-weight:640; text-decoration:underline; text-underline-offset:.14em; }
+    .download { display:inline-flex; align-items:center; min-height:44px; font-size:.9rem; }
+    @media (min-width:49rem) and (max-width:62rem) { .body { padding:.7rem .65rem .25rem; } .fig-links { grid-template-columns:1fr; } .fig-links a { flex-direction:row; align-items:center; justify-content:space-between; padding:.4rem; } }
+    @media (max-width:48.99rem) { .videos { grid-template-columns:minmax(0,1fr); } main { max-width:37rem; } }
+    @media (max-width:22.5rem) { main { width:calc(100% - 1.4rem); } .body { padding:.7rem .7rem .2rem; } }
   </style>
 </head>
 <body>
-  <main>
+<main>
+  <header>
     <h1>Path-tracking experiments</h1>
-    <section class="road" aria-labelledby="scenario-1">
-      <h2 id="scenario-1">Scenario 1. U-shaped path on a hardened road</h2>
-      <p class="figures">
-        <span>Tracking paths (Fig. 11(a))</span>
-        <span>Lateral tracking error (Fig. 12(a))</span>
-        <span>Heading tracking error (Fig. 12(b))</span>
-      </p>
-      <div class="videos">
-        <article>
-          <h3 id="s1-ado-bfaftsm">Proposed method (ADO-BFAFTSM)</h3>
-          <video controls playsinline preload="metadata" aria-labelledby="scenario-1 s1-ado-bfaftsm"
-                 poster="posters/S1-hardened-road-U-shaped-path-ADO-BFAFTSM.jpg">
-            <source src="videos/S1-hardened-road-U-shaped-path-ADO-BFAFTSM.mp4" type="video/mp4">
-          </video>
-          <a href="videos/S1-hardened-road-U-shaped-path-ADO-BFAFTSM.mp4" download aria-label="Download Scenario 1, Proposed method (ADO-BFAFTSM) (MP4)">Download MP4</a>
-        </article>
-        <article>
-          <h3 id="s1-pd">PD</h3>
-          <video controls playsinline preload="metadata" aria-labelledby="scenario-1 s1-pd"
-                 poster="posters/S1-hardened-road-U-shaped-path-PD.jpg">
-            <source src="videos/S1-hardened-road-U-shaped-path-PD.mp4" type="video/mp4">
-          </video>
-          <a href="videos/S1-hardened-road-U-shaped-path-PD.mp4" download aria-label="Download Scenario 1, PD (MP4)">Download MP4</a>
-        </article>
-        <article>
-          <h3 id="s1-stanley">Stanley</h3>
-          <video controls playsinline preload="metadata" aria-labelledby="scenario-1 s1-stanley"
-                 poster="posters/S1-hardened-road-U-shaped-path-Stanley.jpg">
-            <source src="videos/S1-hardened-road-U-shaped-path-Stanley.mp4" type="video/mp4">
-          </video>
-          <a href="videos/S1-hardened-road-U-shaped-path-Stanley.mp4" download aria-label="Download Scenario 1, Stanley (MP4)">Download MP4</a>
-        </article>
-      </div>
-    </section>
-    <section class="soil" aria-labelledby="scenario-2">
-      <h2 id="scenario-2">Scenario 2. Path tracking on soft soil with grass cover</h2>
-      <p class="figures">
-        <span>Tracking paths (Fig. 11(b))</span>
-        <span>Lateral tracking error (Fig. 12(c))</span>
-        <span>Heading tracking error (Fig. 12(d))</span>
-      </p>
-      <div class="videos">
-        <article>
-          <h3 id="s2-ado-bfaftsm">Proposed method (ADO-BFAFTSM)</h3>
-          <video controls playsinline preload="metadata" aria-labelledby="scenario-2 s2-ado-bfaftsm"
-                 poster="posters/S2-grass-covered-soft-soil-ADO-BFAFTSM.jpg">
-            <source src="videos/S2-grass-covered-soft-soil-ADO-BFAFTSM.mp4" type="video/mp4">
-          </video>
-          <a href="videos/S2-grass-covered-soft-soil-ADO-BFAFTSM.mp4" download aria-label="Download Scenario 2, Proposed method (ADO-BFAFTSM) (MP4)">Download MP4</a>
-        </article>
-        <article>
-          <h3 id="s2-pd">PD</h3>
-          <video controls playsinline preload="metadata" aria-labelledby="scenario-2 s2-pd"
-                 poster="posters/S2-grass-covered-soft-soil-PD.jpg">
-            <source src="videos/S2-grass-covered-soft-soil-PD.mp4" type="video/mp4">
-          </video>
-          <a href="videos/S2-grass-covered-soft-soil-PD.mp4" download aria-label="Download Scenario 2, PD (MP4)">Download MP4</a>
-        </article>
-        <article>
-          <h3 id="s2-stanley">Stanley</h3>
-          <video controls playsinline preload="metadata" aria-labelledby="scenario-2 s2-stanley"
-                 poster="posters/S2-grass-covered-soft-soil-Stanley.jpg">
-            <source src="videos/S2-grass-covered-soft-soil-Stanley.mp4" type="video/mp4">
-          </video>
-          <a href="videos/S2-grass-covered-soft-soil-Stanley.mp4" download aria-label="Download Scenario 2, Stanley (MP4)">Download MP4</a>
-        </article>
-      </div>
-    </section>
-  </main>
+    <p class="setup">FW-01 test vehicle &middot; Prescribed speed 1&nbsp;m/s &middot; Control rate 50&nbsp;Hz</p>
+    <nav aria-label="Jump to an experimental scenario"><a href="#hardened-road">Hardened road</a><a href="#soft-soil">Soft soil</a></nav>
+  </header>
+  <section class="road" id="hardened-road" aria-labelledby="hardened-road-title">
+    <span class="scenario">Scenario 1</span>
+    <h2 id="hardened-road-title">U-shaped path on a hardened road</h2>
+    <div class="videos">
+      <article>
+        <h3 id="s1-ado-bfaftsm">ADO-BFAFTSM <small>Proposed method</small></h3>
+        <video controls playsinline preload="metadata" poster="posters/S1-hardened-road-U-shaped-path-ADO-BFAFTSM.jpg" aria-labelledby="hardened-road-title s1-ado-bfaftsm" aria-describedby="s1-ado-bfaftsm-caption">
+          <source src="videos/S1-hardened-road-U-shaped-path-ADO-BFAFTSM.mp4" type="video/mp4">
+          <a href="videos/S1-hardened-road-U-shaped-path-ADO-BFAFTSM.mp4">Open the experimental video</a>
+        </video>
+        <div class="body">
+          <p class="caption" id="s1-ado-bfaftsm-caption">The FW-01 uses the proposed ADO-BFAFTSM controller to track a U-shaped reference path on a hardened road. Fig. 11(a) compares the measured paths of the three controllers. Figs. 12(a) and 12(b) show their lateral and heading tracking errors, respectively, over the entire run.</p>
+          <div class="fig-links" role="group" aria-label="Figures for this recording">
+            <a href="figures/fig-11a.png" target="_blank" rel="noopener" aria-label="Tracking path, Figure 11(a) (opens in a new tab)"><span>Tracking path</span><strong>Fig. 11(a)</strong></a>
+            <a href="figures/fig-12a.png" target="_blank" rel="noopener" aria-label="Lateral error, Figure 12(a) (opens in a new tab)"><span>Lateral error</span><strong>Fig. 12(a)</strong></a>
+            <a href="figures/fig-12b.png" target="_blank" rel="noopener" aria-label="Heading error, Figure 12(b) (opens in a new tab)"><span>Heading error</span><strong>Fig. 12(b)</strong></a>
+          </div>
+          <a class="download" href="videos/S1-hardened-road-U-shaped-path-ADO-BFAFTSM.mp4" download aria-label="Download ADO-BFAFTSM video for scenario 1">Download MP4</a>
+        </div>
+      </article>
+      <article>
+        <h3 id="s1-pd">PD</h3>
+        <video controls playsinline preload="metadata" poster="posters/S1-hardened-road-U-shaped-path-PD.jpg" aria-labelledby="hardened-road-title s1-pd" aria-describedby="s1-pd-caption">
+          <source src="videos/S1-hardened-road-U-shaped-path-PD.mp4" type="video/mp4">
+          <a href="videos/S1-hardened-road-U-shaped-path-PD.mp4">Open the experimental video</a>
+        </video>
+        <div class="body">
+          <p class="caption" id="s1-pd-caption">The FW-01 uses the PD controller to track a U-shaped reference path on a hardened road. Fig. 11(a) compares the measured paths of the three controllers. Figs. 12(a) and 12(b) show their lateral and heading tracking errors, respectively, over the entire run.</p>
+          <div class="fig-links" role="group" aria-label="Figures for this recording">
+            <a href="figures/fig-11a.png" target="_blank" rel="noopener" aria-label="Tracking path, Figure 11(a) (opens in a new tab)"><span>Tracking path</span><strong>Fig. 11(a)</strong></a>
+            <a href="figures/fig-12a.png" target="_blank" rel="noopener" aria-label="Lateral error, Figure 12(a) (opens in a new tab)"><span>Lateral error</span><strong>Fig. 12(a)</strong></a>
+            <a href="figures/fig-12b.png" target="_blank" rel="noopener" aria-label="Heading error, Figure 12(b) (opens in a new tab)"><span>Heading error</span><strong>Fig. 12(b)</strong></a>
+          </div>
+          <a class="download" href="videos/S1-hardened-road-U-shaped-path-PD.mp4" download aria-label="Download PD video for scenario 1">Download MP4</a>
+        </div>
+      </article>
+      <article>
+        <h3 id="s1-stanley">Stanley</h3>
+        <video controls playsinline preload="metadata" poster="posters/S1-hardened-road-U-shaped-path-Stanley.jpg" aria-labelledby="hardened-road-title s1-stanley" aria-describedby="s1-stanley-caption">
+          <source src="videos/S1-hardened-road-U-shaped-path-Stanley.mp4" type="video/mp4">
+          <a href="videos/S1-hardened-road-U-shaped-path-Stanley.mp4">Open the experimental video</a>
+        </video>
+        <div class="body">
+          <p class="caption" id="s1-stanley-caption">The FW-01 uses the Stanley controller to track a U-shaped reference path on a hardened road. Fig. 11(a) compares the measured paths of the three controllers. Figs. 12(a) and 12(b) show their lateral and heading tracking errors, respectively, over the entire run.</p>
+          <div class="fig-links" role="group" aria-label="Figures for this recording">
+            <a href="figures/fig-11a.png" target="_blank" rel="noopener" aria-label="Tracking path, Figure 11(a) (opens in a new tab)"><span>Tracking path</span><strong>Fig. 11(a)</strong></a>
+            <a href="figures/fig-12a.png" target="_blank" rel="noopener" aria-label="Lateral error, Figure 12(a) (opens in a new tab)"><span>Lateral error</span><strong>Fig. 12(a)</strong></a>
+            <a href="figures/fig-12b.png" target="_blank" rel="noopener" aria-label="Heading error, Figure 12(b) (opens in a new tab)"><span>Heading error</span><strong>Fig. 12(b)</strong></a>
+          </div>
+          <a class="download" href="videos/S1-hardened-road-U-shaped-path-Stanley.mp4" download aria-label="Download Stanley video for scenario 1">Download MP4</a>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="soil" id="soft-soil" aria-labelledby="soft-soil-title">
+    <span class="scenario">Scenario 2</span>
+    <h2 id="soft-soil-title">Path tracking on soft soil with grass cover</h2>
+    <div class="videos">
+      <article>
+        <h3 id="s2-ado-bfaftsm">ADO-BFAFTSM <small>Proposed method</small></h3>
+        <video controls playsinline preload="metadata" poster="posters/S2-grass-covered-soft-soil-ADO-BFAFTSM.jpg" aria-labelledby="soft-soil-title s2-ado-bfaftsm" aria-describedby="s2-ado-bfaftsm-caption">
+          <source src="videos/S2-grass-covered-soft-soil-ADO-BFAFTSM.mp4" type="video/mp4">
+          <a href="videos/S2-grass-covered-soft-soil-ADO-BFAFTSM.mp4">Open the experimental video</a>
+        </video>
+        <div class="body">
+          <p class="caption" id="s2-ado-bfaftsm-caption">The FW-01 uses the proposed ADO-BFAFTSM controller to track the reference path on soft soil with grass cover. Fig. 11(b) compares the measured paths of the three controllers. Figs. 12(c) and 12(d) show their lateral and heading tracking errors, respectively, over the entire run.</p>
+          <div class="fig-links" role="group" aria-label="Figures for this recording">
+            <a href="figures/fig-11b.png" target="_blank" rel="noopener" aria-label="Tracking path, Figure 11(b) (opens in a new tab)"><span>Tracking path</span><strong>Fig. 11(b)</strong></a>
+            <a href="figures/fig-12c.png" target="_blank" rel="noopener" aria-label="Lateral error, Figure 12(c) (opens in a new tab)"><span>Lateral error</span><strong>Fig. 12(c)</strong></a>
+            <a href="figures/fig-12d.png" target="_blank" rel="noopener" aria-label="Heading error, Figure 12(d) (opens in a new tab)"><span>Heading error</span><strong>Fig. 12(d)</strong></a>
+          </div>
+          <a class="download" href="videos/S2-grass-covered-soft-soil-ADO-BFAFTSM.mp4" download aria-label="Download ADO-BFAFTSM video for scenario 2">Download MP4</a>
+        </div>
+      </article>
+      <article>
+        <h3 id="s2-pd">PD</h3>
+        <video controls playsinline preload="metadata" poster="posters/S2-grass-covered-soft-soil-PD.jpg" aria-labelledby="soft-soil-title s2-pd" aria-describedby="s2-pd-caption">
+          <source src="videos/S2-grass-covered-soft-soil-PD.mp4" type="video/mp4">
+          <a href="videos/S2-grass-covered-soft-soil-PD.mp4">Open the experimental video</a>
+        </video>
+        <div class="body">
+          <p class="caption" id="s2-pd-caption">The FW-01 uses the PD controller to track the reference path on soft soil with grass cover. Fig. 11(b) compares the measured paths of the three controllers. Figs. 12(c) and 12(d) show their lateral and heading tracking errors, respectively, over the entire run.</p>
+          <div class="fig-links" role="group" aria-label="Figures for this recording">
+            <a href="figures/fig-11b.png" target="_blank" rel="noopener" aria-label="Tracking path, Figure 11(b) (opens in a new tab)"><span>Tracking path</span><strong>Fig. 11(b)</strong></a>
+            <a href="figures/fig-12c.png" target="_blank" rel="noopener" aria-label="Lateral error, Figure 12(c) (opens in a new tab)"><span>Lateral error</span><strong>Fig. 12(c)</strong></a>
+            <a href="figures/fig-12d.png" target="_blank" rel="noopener" aria-label="Heading error, Figure 12(d) (opens in a new tab)"><span>Heading error</span><strong>Fig. 12(d)</strong></a>
+          </div>
+          <a class="download" href="videos/S2-grass-covered-soft-soil-PD.mp4" download aria-label="Download PD video for scenario 2">Download MP4</a>
+        </div>
+      </article>
+      <article>
+        <h3 id="s2-stanley">Stanley</h3>
+        <video controls playsinline preload="metadata" poster="posters/S2-grass-covered-soft-soil-Stanley.jpg" aria-labelledby="soft-soil-title s2-stanley" aria-describedby="s2-stanley-caption">
+          <source src="videos/S2-grass-covered-soft-soil-Stanley.mp4" type="video/mp4">
+          <a href="videos/S2-grass-covered-soft-soil-Stanley.mp4">Open the experimental video</a>
+        </video>
+        <div class="body">
+          <p class="caption" id="s2-stanley-caption">The FW-01 uses the Stanley controller to track the reference path on soft soil with grass cover. Fig. 11(b) compares the measured paths of the three controllers. Figs. 12(c) and 12(d) show their lateral and heading tracking errors, respectively, over the entire run.</p>
+          <div class="fig-links" role="group" aria-label="Figures for this recording">
+            <a href="figures/fig-11b.png" target="_blank" rel="noopener" aria-label="Tracking path, Figure 11(b) (opens in a new tab)"><span>Tracking path</span><strong>Fig. 11(b)</strong></a>
+            <a href="figures/fig-12c.png" target="_blank" rel="noopener" aria-label="Lateral error, Figure 12(c) (opens in a new tab)"><span>Lateral error</span><strong>Fig. 12(c)</strong></a>
+            <a href="figures/fig-12d.png" target="_blank" rel="noopener" aria-label="Heading error, Figure 12(d) (opens in a new tab)"><span>Heading error</span><strong>Fig. 12(d)</strong></a>
+          </div>
+          <a class="download" href="videos/S2-grass-covered-soft-soil-Stanley.mp4" download aria-label="Download Stanley video for scenario 2">Download MP4</a>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+<script>
+  const players = document.querySelectorAll("video");
+  for (const player of players) {
+    const wrap = document.createElement("div");
+    wrap.className = "player";
+    player.before(wrap);
+    wrap.append(player);
+    const cover = document.createElement("button");
+    cover.type = "button";
+    cover.className = "play-cover";
+    cover.style.backgroundImage = 'url("' + player.poster + '")';
+    const method = player.closest("article").querySelector("h3").textContent.trim();
+    const scenario = player.closest("section").querySelector(".scenario").textContent;
+    cover.setAttribute("aria-label", "Play " + method + " video, " + scenario);
+    const playLabel = document.createElement("span");
+    playLabel.textContent = "▶  Play video";
+    cover.append(playLabel);
+    wrap.append(cover);
+    cover.addEventListener("click", () => {
+      cover.remove();
+      player.focus();
+      player.play().catch(() => { player.controls = true; });
+    });
+    player.addEventListener("play", () => {
+      cover.remove();
+      player.classList.add("started");
+      for (const other of players) {
+        if (other !== player && !other.paused) other.pause();
+      }
+    });
+  }
+</script>
 </body>
 </html>
