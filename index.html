@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Path-tracking experiments</title>
+  <style>
+    :root { color-scheme: light; font-family: "Source Sans 3", "Segoe UI", system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #1d3028; background: #fafbf9; }
+    main { max-width: 68rem; margin: 0 auto; padding: clamp(1.2rem, 5vw, 3rem) 1.25rem 3rem; }
+    h1, h2, h3 { margin: 0; }
+    h1 { font-size: clamp(2rem, 5vw, 3.15rem); line-height: 1.12; letter-spacing: -.025em; }
+    section { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid #aebdb5; }
+    h2 { font-size: clamp(1.2rem, 3vw, 1.6rem); line-height: 1.3; }
+    h3 { margin-bottom: .5rem; font-size: 1rem; line-height: 1.4; }
+    .figures { display: flex; flex-wrap: wrap; gap: .25rem 1.3rem; margin: .5rem 0 1.2rem; color: #425c4f; line-height: 1.5; }
+    .videos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.1rem; }
+    video { display: block; width: 100%; object-fit: contain; background: #19231f; border-radius: .3rem; }
+    .road video { aspect-ratio: 540 / 716; }
+    .soil video { aspect-ratio: 1280 / 576; }
+    a { display: inline-block; margin-top: .45rem; color: #165040; font-size: .9rem; text-underline-offset: .17em; }
+    :focus-visible { outline: 2px solid #165040; outline-offset: 3px; }
+    @media (max-width: 45rem) {
+      .videos { grid-template-columns: 1fr; gap: 1.6rem; }
+      .road video { width: min(100%, 25rem); }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Path-tracking experiments</h1>
+    <section class="road" aria-labelledby="scenario-1">
+      <h2 id="scenario-1">Scenario 1. U-shaped path on a hardened road</h2>
+      <p class="figures">
+        <span>Tracking paths (Fig. 11(a))</span>
+        <span>Lateral tracking error (Fig. 12(a))</span>
+        <span>Heading tracking error (Fig. 12(b))</span>
+      </p>
+      <div class="videos">
+        <article>
+          <h3 id="s1-ado-bfaftsm">Proposed method (ADO-BFAFTSM)</h3>
+          <video controls playsinline preload="metadata" aria-labelledby="scenario-1 s1-ado-bfaftsm"
+                 poster="posters/S1-hardened-road-U-shaped-path-ADO-BFAFTSM.jpg">
+            <source src="videos/S1-hardened-road-U-shaped-path-ADO-BFAFTSM.mp4" type="video/mp4">
+          </video>
+          <a href="videos/S1-hardened-road-U-shaped-path-ADO-BFAFTSM.mp4" download aria-label="Download Scenario 1, Proposed method (ADO-BFAFTSM) (MP4)">Download MP4</a>
+        </article>
+        <article>
+          <h3 id="s1-pd">PD</h3>
+          <video controls playsinline preload="metadata" aria-labelledby="scenario-1 s1-pd"
+                 poster="posters/S1-hardened-road-U-shaped-path-PD.jpg">
+            <source src="videos/S1-hardened-road-U-shaped-path-PD.mp4" type="video/mp4">
+          </video>
+          <a href="videos/S1-hardened-road-U-shaped-path-PD.mp4" download aria-label="Download Scenario 1, PD (MP4)">Download MP4</a>
+        </article>
+        <article>
+          <h3 id="s1-stanley">Stanley</h3>
+          <video controls playsinline preload="metadata" aria-labelledby="scenario-1 s1-stanley"
+                 poster="posters/S1-hardened-road-U-shaped-path-Stanley.jpg">
+            <source src="videos/S1-hardened-road-U-shaped-path-Stanley.mp4" type="video/mp4">
+          </video>
+          <a href="videos/S1-hardened-road-U-shaped-path-Stanley.mp4" download aria-label="Download Scenario 1, Stanley (MP4)">Download MP4</a>
+        </article>
+      </div>
+    </section>
+    <section class="soil" aria-labelledby="scenario-2">
+      <h2 id="scenario-2">Scenario 2. Path tracking on soft soil with grass cover</h2>
+      <p class="figures">
+        <span>Tracking paths (Fig. 11(b))</span>
+        <span>Lateral tracking error (Fig. 12(c))</span>
+        <span>Heading tracking error (Fig. 12(d))</span>
+      </p>
+      <div class="videos">
+        <article>
+          <h3 id="s2-ado-bfaftsm">Proposed method (ADO-BFAFTSM)</h3>
+          <video controls playsinline preload="metadata" aria-labelledby="scenario-2 s2-ado-bfaftsm"
+                 poster="posters/S2-grass-covered-soft-soil-ADO-BFAFTSM.jpg">
+            <source src="videos/S2-grass-covered-soft-soil-ADO-BFAFTSM.mp4" type="video/mp4">
+          </video>
+          <a href="videos/S2-grass-covered-soft-soil-ADO-BFAFTSM.mp4" download aria-label="Download Scenario 2, Proposed method (ADO-BFAFTSM) (MP4)">Download MP4</a>
+        </article>
+        <article>
+          <h3 id="s2-pd">PD</h3>
+          <video controls playsinline preload="metadata" aria-labelledby="scenario-2 s2-pd"
+                 poster="posters/S2-grass-covered-soft-soil-PD.jpg">
+            <source src="videos/S2-grass-covered-soft-soil-PD.mp4" type="video/mp4">
+          </video>
+          <a href="videos/S2-grass-covered-soft-soil-PD.mp4" download aria-label="Download Scenario 2, PD (MP4)">Download MP4</a>
+        </article>
+        <article>
+          <h3 id="s2-stanley">Stanley</h3>
+          <video controls playsinline preload="metadata" aria-labelledby="scenario-2 s2-stanley"
+                 poster="posters/S2-grass-covered-soft-soil-Stanley.jpg">
+            <source src="videos/S2-grass-covered-soft-soil-Stanley.mp4" type="video/mp4">
+          </video>
+          <a href="videos/S2-grass-covered-soft-soil-Stanley.mp4" download aria-label="Download Scenario 2, Stanley (MP4)">Download MP4</a>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
